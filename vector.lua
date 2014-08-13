@@ -1,5 +1,7 @@
 
 function math.sign(a) return a>=0 and 1 or -1 end
+-- if min > max, it will return min
+function math.clamp(min, val, max) return math.max(min, math.min(val, max)) end
 
 local Vector_proto = {
 	copy = function(self) return Vector(self.x,self.y) end,
@@ -53,8 +55,8 @@ local Vector_mt = {
 		__div = function (tovec, fromvec)
 			-- since division for vectors is not defined, we use the operator for "angle between vectors"
 			local v1,v2 = fromvec:norm(),tovec:norm()
-			local cosangle = math.acos(v1*v2)
-			local sinangle = math.asin(v1*v2:ortho())
+			local cosangle = math.acos(math.clamp(-1,v1*v2,1))
+			local sinangle = math.asin(math.clamp(-1,v1*v2:ortho(),1))
 			return cosangle*math.sign(sinangle)
 		end,
 		__unm = function(vec) return Vector(-vec.x,-vec.y) end

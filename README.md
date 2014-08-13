@@ -16,9 +16,10 @@ Including it in your project:
 
 Creating:
 
-	vector 		= Vector(x,y)
-	vector 		= VectorFromAngle(angle_rad)
-	vector 		= VectorFromPolar(radius, angle)
+	vector 			= Vector(x,y)
+	vector 			= VectorFromPolar(radius, angle)
+	unary_vector 	= VectorFromAngle(angle_rad)
+
 
 Getting components:
 
@@ -26,28 +27,41 @@ Getting components:
 	y 			= vector.y
 	radius 		= vector:mod()
 	angle 		= vector:angle()
-	bool		= vector:isZero()
+	boolean		= vector:isZero()
 
-	(note: isZero returns true when both components are 0)
 
-Operations:
-
-	sum_of_vectors 			= vector1 + vector2
-	difference 				= vector1 - vector2
-	vector_by_scalar 		= vector * scalar
-	scalar_by_vector 		= scalar * vector
-	dot_product 			= vector1 * vector2
-	per_component_product 	= vector1 ^ vector2
-	
-Single operand operations (returns copy, does not modify original):
+Operations (return copy of vector):
 
 	unmodified_copy 		= vector:copy()
+	sum_of_vectors 			= vector1 + vector2
+	difference 				= vector1 - vector2
+	vector_by_scalar 		= vector * k
+	scalar_by_vector 		= k * vector
+	per_component_product 	= vector1 ^ vector2
 	normalize 				= vector:norm()
 	abs_of_components 		= vector:abs()
 	floor_of_components 	= vector:floor()
 	sign_of_components 		= vector:sign()
 	rotate					= vector:rot(angle)
+	mirror					= -vector
+	orthogonal(1)			= vector:ortho()
+	orthogonal(2)			= -vector:ortho()
 
-	(note: sign returns 1 if component >= 0, -1 if component < 0 )
+
+Operations (return number):
+
+	dot_product 			= vector1 * vector2
+	angle_between_vectors	= vector_to / vector_from
+
+
+Notes:
+
+	 * isZero(v) = (x,y) == (0,0)
+	 * sign(a) = a>=0 ? 1 : -1
+	 * ortho(x,y) = (y,-x)
+	 * -ortho(x,y) = (-y,x)
+	 * dist(v1,v2) = (v2-v1):mod()
+	 * v2 = v1:rot(v2/v1)
+
 
 -- Christiaan Janssen, August 2014

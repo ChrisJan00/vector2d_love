@@ -14,22 +14,26 @@ local Vector_proto = {
 	angle = function(self)
        return math.atan2(self.y,self.x)
 	end,
+	isZero = function(self)
+		return self.x == 0 and self.y == 0
+	end,
 	abs = function(self)
 		return Vector(math.abs(self.x),math.abs(self.y))
 	end,
 	sign = function(self)
 		return Vector(math.sign(self.x),math.abs(self.y))
 	end,
-	isZero = function(self)
-		return self.x == 0 and self.y == 0
+	floor = function(self)
+		return Vector(math.floor(self.x),math.floor(self.y))
 	end,
 	rot = function(self, angle)
 		local c,s = math.cos(angle), math.sin(angle)
 		return Vector(self.x*c-self.y*s, self.x*s+self.y*c)
 	end,
-	floor = function(self)
-		return Vector(math.floor(self.x),math.floor(self.y))
+	ortho = function(self)
+		return Vector(self.y,-self.x)
 	end,
+	
 }
 
 local Vector_mt = {
@@ -46,6 +50,14 @@ local Vector_mt = {
 			-- we will use pow for the second one
 			return Vector(lt.x*rt.x, lt.y*rt.y)
 		end,
+		__div = function (tovec, fromvec)
+			-- since division for vectors is not defined, we use the operator for "angle between vectors"
+			local v1,v2 = fromvec:norm(),tovec:norm()
+			local cosangle = math.acos(v1*v2)
+			local sinangle = math.asin(v1*v2:ortho())
+			return cosangle*math.sign(sinangle)
+		end,
+		__unm = function(vec) return Vector(-vec.x,-vec.y) end
 	}
 
 

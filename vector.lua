@@ -23,7 +23,7 @@ local Vector_proto = {
 		return Vector(math.abs(self.x),math.abs(self.y))
 	end,
 	sign = function(self)
-		return Vector(math.sign(self.x),math.abs(self.y))
+		return Vector(math.sign(self.x),math.sign(self.y))
 	end,
 	floor = function(self)
 		return Vector(math.floor(self.x),math.floor(self.y))

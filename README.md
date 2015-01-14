@@ -1,5 +1,5 @@
-vector_love
-===========
+vector (love2d lib)
+===================
 by Christiaan Janssen
 
 A convenience implementation of 2D vectors.  I don't expect this to be useful to
@@ -16,8 +16,8 @@ Including it in your project:
 
 Creating:
 
-	vector 			= Vector(x,y)
-	vector 			= VectorFromPolar(radius, angle)
+	vector (rect)	= Vector(x,y)
+	vector (polar)	= VectorFromPolar(radius, angle)
 	unary_vector 	= VectorFromAngle(angle_rad)
 
 
@@ -27,7 +27,12 @@ Getting components:
 	y 			= vector.y
 	radius 		= vector:mod()
 	angle 		= vector:angle()
-	boolean		= vector:isZero()
+	
+
+Comparison:
+
+	boolean     = vector:isZero()
+    boolean     = vector:isEq(vector2)
 
 
 Operations (return copy of vector):
@@ -37,21 +42,38 @@ Operations (return copy of vector):
 	difference 				= vector1 - vector2
 	vector_by_scalar 		= vector * k
 	scalar_by_vector 		= k * vector
+	per_components_division = vector / k
+	per_components_divide   = k / vector
 	per_component_product 	= vector1 ^ vector2
 	normalize 				= vector:norm()
 	abs_of_components 		= vector:abs()
 	floor_of_components 	= vector:floor()
+	round_of_components     = vector:round()
 	sign_of_components 		= vector:sign()
 	rotate					= vector:rot(angle)
+	angle_between_vectors	= vector:angleTo(vector_2)
 	mirror					= -vector
 	orthogonal(1)			= vector:ortho()
 	orthogonal(2)			= -vector:ortho()
+	limit_components        = vector:clamp(vector_of_min, vector_of_max)
+	quantized_components    = vector:quant()
 
 
-Operations (return number):
+Operations (return number(s)):
 
 	dot_product 			= vector1 * vector2
-	angle_between_vectors	= vector_to / vector_from
+	x,y                     = vector:unpack()
+	
+
+Attach user data:
+    
+    The basic creation operation accepts one extra parameter "data", which is
+    expected to be a table.  The table is appended to the vector.  Operations
+    that return new vectors do NOT pass this data around.
+    
+    Example:
+    local v2 = Vector(10,11,{foo="one", bar=-1})
+    returns a vector { x = 10, y = 11, foo = "one", bar = -1 }
 
 
 Notes:
@@ -62,6 +84,8 @@ Notes:
 	 * -ortho(x,y) = (-y,x)
 	 * dist(v1,v2) = (v2-v1):mod()
 	 * v2 = v1:rot(v2/v1)
+	 * unpack does not return data
+	 * call math.setQuantStep(step) to change v:quant() step
 
 
--- Christiaan Janssen, August 2014
+-- Christiaan Janssen, January 2015

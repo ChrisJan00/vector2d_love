@@ -2,6 +2,7 @@
 function math.sign(a) return a>=0 and 1 or -1 end
 -- if min > max, it will return min
 function math.clamp(min, val, max) return math.max(min, math.min(val, max)) end
+function math.round(a) return math.floor(a+0.5) end
 
 local Vector_proto = {
 	copy = function(self) return Vector(self.x,self.y) end,
@@ -28,6 +29,9 @@ local Vector_proto = {
 	floor = function(self)
 		return Vector(math.floor(self.x),math.floor(self.y))
 	end,
+	round = function(self)
+		return Vector(math.floor(self.x+0.5),math.floor(self.y+0.5))
+	end,
 	rot = function(self, angle)
 		local c,s = math.cos(angle), math.sin(angle)
 		return Vector(self.x*c-self.y*s, self.x*s+self.y*c)
@@ -35,7 +39,20 @@ local Vector_proto = {
 	ortho = function(self)
 		return Vector(self.y,-self.x)
 	end,
-	
+	unpack = function(self)
+		return self.x,self.y
+	end,
+	clamp = function(self,v1,v2)
+		return Vector(math.clamp(v1.x, self.x, v2.x), math.clamp(v1.y, self.y, v2.y))
+	end,
+	-- note: "iseq" instead of overridding the "__eq" operator because
+	-- I still want to use vectors as hashes
+	isEq = function(self, v2)
+		return self.x==v2.x and self.y==v2.y
+	end,
+	isZero = function(self)
+		return self.x==0 and self.y==0
+	end
 }
 
 local Vector_mt = {
@@ -53,18 +70,23 @@ local Vector_mt = {
 			return Vector(lt.x*rt.x, lt.y*rt.y)
 		end,
 		__div = function (tovec, fromvec)
-			-- since division for vectors is not defined, we use the operator for "angle between vectors"
+			if type(fromvec) == "number" then return Vector(tovec.x/fromvec, tovec.y/fromvec) end
+			if type(tovec) == "number" then return Vector(tovec/fromvec.x, tovec/fromvec.y) end
+			-- since division between vectors is not defined, we use the operator for "angle between vectors"
 			local v1,v2 = fromvec:norm(),tovec:norm()
 			local cosangle = math.acos(math.clamp(-1,v1*v2,1))
 			local sinangle = math.asin(math.clamp(-1,v1*v2:ortho(),1))
 			return cosangle*math.sign(sinangle)
 		end,
-		__unm = function(vec) return Vector(-vec.x,-vec.y) end
+		__unm = function(vec) return Vector(-vec.x,-vec.y) end,
 	}
 
 
-function Vector(x,y)
+function Vector(x,y,data)
 	local vec = { x = x or 0, y = y or 0 }
+	if data and type(data) == "table" then
+		for k,v in pairs(data) do vec[k] = v end
+	end
 	setmetatable(vec,Vector_mt)
 	return vec
 end

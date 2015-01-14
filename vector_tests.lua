@@ -4,7 +4,10 @@ require 'vector'
 local get_filename = function() 
     local fn = debug.getinfo(2,"S").short_src
     local index = string.find(fn, "/[^/]*$")
-    return fn:sub(index+1)
+    if index then
+        return fn:sub(index+1)
+    end
+    return fn
 end
 
 local filename = get_filename()
@@ -40,18 +43,6 @@ function runTests(tests)
 
     print("\nPassed "..passedCount.." / "..#tests.." tests")
 end
-
-
--- Notes:
-
---      * isZero(v) = (x,y) == (0,0)
---      * sign(a) = a>=0 ? 1 : -1
---      * ortho(x,y) = (y,-x)
---      * -ortho(x,y) = (-y,x)
---      * dist(v1,v2) = (v2-v1):mod()
---      * v2 = v1:rot(v2/v1)
---      * unpack does not return data
-
 
 tests = {
     function()

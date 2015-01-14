@@ -1,5 +1,5 @@
-vector (love2d lib)
-===================
+vector2d_love
+=============
 by Christiaan Janssen
 
 A convenience implementation of 2D vectors.  I don't expect this to be useful to

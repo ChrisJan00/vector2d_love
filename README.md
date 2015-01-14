@@ -51,7 +51,7 @@ Operations (return copy of vector):
 	round_of_components     = vector:round()
 	sign_of_components 		= vector:sign()
 	rotate					= vector:rot(angle)
-	angle_between_vectors	= vector:angleTo(vector_2)
+	angle_between_vectors	= vector:angleBetween(vector_2)
 	mirror					= -vector
 	orthogonal(1)			= vector:ortho()
 	orthogonal(2)			= -vector:ortho()

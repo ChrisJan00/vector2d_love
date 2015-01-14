@@ -66,7 +66,7 @@ local Vector_proto = {
 		local c,s = math.cos(angle), math.sin(angle)
 		return Vector(self.x*c-self.y*s, self.x*s+self.y*c)
 	end,
-	angleTo = function(fromvec, tovec)
+	angleBetween = function(fromvec, tovec)
 		-- since division between vectors is not defined, we use the operator for "angle between vectors"
 		local v1,v2 = fromvec:norm(),tovec:norm()
 		local cosangle = math.acos(math.clamp(-1,v1*v2,1))

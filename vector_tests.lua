@@ -98,12 +98,10 @@ tests = {
         compare(a.y, 20)
 
         local b = VectorFromAngle(math.pi*0.5)
-        -- note: prevent rounding errors
         compare(b.x, 0)
         compare(b.y, 1)
 
         local c = VectorFromPolar(10, math.pi)
-        -- note: prevent rounding errors
         compare(c.x, -10)
         compare(c.y, 0)
     end,
@@ -128,7 +126,6 @@ tests = {
         compare(a.x, 30)
         compare(a.y, 40)
         compare(a:mod(), 50)
-
         compare(Vector(5,5):angle(), math.pi/4)
     end,
 
@@ -139,12 +136,14 @@ tests = {
 
         -- this test relies on the implementation of "quant" to avoid rounding errors
         local a = Vector(0,100)
-        local b = VectorFromPolar(100, math.pi/2):quant()
+        local b = Vector(0,100)
         compare(a:isEq(b), true)
+        local c = VectorFromPolar(100, math.pi/2):quant()
+        compare(a:isEq(c), true)
     end,
 
     function()
-        -- products
+        -- product by scalar
         local a = Vector(1,2)
         compare(a.x,1)
         compare(a.y,2)
@@ -178,6 +177,7 @@ tests = {
         compare(h.x, 5)
         compare(h.y, 50)
 
+        -- divide scalar by vector
         local i = 1000 / g
         compare(i.x, 100)
         compare(i.y, 10)
@@ -190,22 +190,28 @@ tests = {
         local c = a
         compare(b:isEq(a), true)
         compare(c:isEq(a), true)
+
+        -- make sure that the clone is not a reference
         b.y = 10
         compare(b:isEq(a), false)
         compare(c:isEq(a), true)
     end,
 
     function()
-        -- more operations:
+        -- more operations
+
+        -- normalize
         local a = Vector(10,-10)
         local b = a:norm()
         compare(a:mod(), 10 * math.sqrt(2))
         compare(b:mod(), 1)
 
+        -- absolute value
         local c = a:abs()
         compare(c.x, 10)
         compare(c.y, 10)
 
+        -- floor and round
         local d = Vector(2.4, 2.5)
         local e = d:floor()
         local f = d:round()
@@ -214,10 +220,12 @@ tests = {
         compare(f.x, 2)
         compare(f.y, 3)
 
+        -- get the sign of the components
         local g = a:sign()
         compare(g.x, 1)
         compare(g.y, -1)
 
+        -- mirror (vector in the opposite direction)
         local h = -a
         compare(h.x, -10)
         compare(h.y, 10)
@@ -229,12 +237,13 @@ tests = {
         local b = a:rot(math.pi/4)
         compare(b:mod(),a:mod())
         compare(b:angle(),math.pi/2)
-        compare(a:angleTo(b), math.pi/4)
+        compare(a:angleBetween(b), math.pi/4)
 
         -- test quantize (checking booleans to avoid the embedded quantize in compare)
         compare(b.x == 0, false)
         compare(b:quant().x == 0, true)
 
+        -- orthogonal vectors
         local c = a:ortho()
         local d = -a:ortho()
         compare(c.x, 10)
@@ -273,11 +282,42 @@ tests = {
         local a = Vector(3,4)
         local b = Vector(5,6)
 
+        -- dot product
         compare(a*b, 39)
 
+        -- unpack
         local x,y = a:unpack()
         compare(x, 3)
         compare(y, 4)
+    end,
+
+    function()
+        -- some examples of vector use
+        local pos1 = Vector(10, 0)
+        local pos2 = Vector(20, 10)
+
+        -- distance
+        local dist = (pos1 - pos2):mod()
+        compare(dist, 10*math.sqrt(2))
+
+        -- angle from point to point
+        local ang = (pos2 - pos1):angle()
+        compare(ang, math.pi/4)
+
+        -- linear movement
+        local speed = 10 * math.sqrt(2)
+        local angle = -math.pi/4
+        local timestep = 0.1
+        local newPos = pos1 + timestep * VectorFromPolar(speed,angle)
+        compare(newPos.x, 11)
+        compare(newPos.y, -1)
+
+        -- field of view
+        local fov_angle = math.pi/3
+        local relative_angle_of_pos2 = (newPos - pos1):angleBetween(pos2 - pos1)
+        local is_in_sight = relative_angle_of_pos2 < fov_angle
+        compare(is_in_sight, false)
+
     end,
 
 }

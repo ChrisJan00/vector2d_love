@@ -22,7 +22,7 @@
 require 'vector'
 
 -- test convenience functions
-local get_filename = function() 
+local get_filename = function()
     local fn = debug.getinfo(2,"S").short_src
     local index = string.find(fn, "/[^/]*$")
     if index then
@@ -35,7 +35,7 @@ local filename = get_filename()
 
 function compare(result, expected)
     if result == expected then return end
-    if type(result) == "number" and type(expected) == "number" and 
+    if type(result) == "number" and type(expected) == "number" and
         math.quantize(result) == math.quantize(expected) then
         return true
     end
@@ -90,7 +90,7 @@ tests = {
         compare(math.clamp(2,5,5), 5)
         compare(math.clamp(2,10,5), 5)
     end,
-    
+
     function()
         -- create vectors
         local a = Vector(10,20)
@@ -181,6 +181,15 @@ tests = {
         local i = 1000 / g
         compare(i.x, 100)
         compare(i.y, 10)
+
+        -- modulo
+        local j = Vector(30, 45)
+        local k = j % Vector(12, 16)
+        local l = j % 18
+        compare(k.x, 6)
+        compare(k.y, 13)
+        compare(l.x, 12)
+        compare(l.y, 9)
     end,
 
     function()
@@ -268,11 +277,11 @@ tests = {
         local c = Vector(50,50):clamp(min, max)
         compare(c.x, 10)
         compare(c.y, 100)
- 
+
         local d = Vector(105,105):clamp(min, max)
         compare(d.x, 10)
         compare(d.y, 105)
- 
+
         local e = Vector(200,200):clamp(min, max)
         compare(e.x, 10)
         compare(e.y, 110)

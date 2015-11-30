@@ -27,11 +27,11 @@ function math.round(a) return math.floor(a+0.5) end
 -- avoid rounding errors
 local quant = 1e-10
 function math.setQuantStep(step) quant = step end
-function math.quantize(a) return math.round(a/quant)*quant end 
+function math.quantize(a) return math.round(a/quant)*quant end
 
 local Vector_proto = {
 	copy = function(self) return Vector(self.x,self.y) end,
-	norm = function(self) 
+	norm = function(self)
 		local m = self:mod()
 		m = m == 0 and 1 or 1/m
 		return m*self
@@ -107,6 +107,10 @@ local Vector_mt = {
 			return lt
 		end,
 		__unm = function(vec) return Vector(-vec.x,-vec.y) end,
+		__mod = function(lt, rt)
+			if type(rt) == "number" then return Vector(lt.x%rt, lt.y%rt) end
+			return Vector(lt.x%rt.x, lt.y%rt.y)
+		end,
 	}
 
 

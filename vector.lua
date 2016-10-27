@@ -104,7 +104,8 @@ local Vector_mt = {
 		__div = function (lt, rt)
 			if type(rt) == "number" then return Vector(lt.x/rt, lt.y/rt) end
 			if type(lt) == "number" then return Vector(lt/rt.x, lt/rt.y) end
-			return lt
+			-- defaults to per-element division
+			return Vector(lt.x/rt.x, lt.y/rt.y)
 		end,
 		__unm = function(vec) return Vector(-vec.x,-vec.y) end,
 		__mod = function(lt, rt)

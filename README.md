@@ -44,6 +44,7 @@ Operations (return copy of vector):
 	scalar_by_vector 		= k * vector
 	per_components_division = vector / k
 	per_components_divide   = k / vector
+	per_components_divide   = vector1 / vector2
 	per_component_product 	= vector1 ^ vector2
 	normalize 				= vector:norm()
 	abs_of_components 		= vector:abs()

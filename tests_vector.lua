@@ -289,15 +289,21 @@ tests = {
 
     function()
         local a = Vector(3,4)
-        local b = Vector(5,6)
+        local b = Vector(5,8)
 
         -- dot product
-        compare(a*b, 39)
+        compare(a*b, 47)
 
         -- unpack
         local x,y = a:unpack()
         compare(x, 3)
         compare(y, 4)
+
+        -- per-element division
+        local c = a/b
+        compare(c.x, 0.6)
+        compare(c.y, 0.5)
+
     end,
 
     function()

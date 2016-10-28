@@ -220,24 +220,27 @@ tests = {
         compare(c.x, 10)
         compare(c.y, 10)
 
-        -- floor and round
+        -- floor, round and ceil
         local d = Vector(2.4, 2.5)
         local e = d:floor()
         local f = d:round()
+        local g = d:ceil()
         compare(e.x, 2)
         compare(e.y, 2)
         compare(f.x, 2)
         compare(f.y, 3)
+        compare(g.x, 3)
+        compare(g.y, 3)
 
         -- get the sign of the components
-        local g = a:sign()
-        compare(g.x, 1)
-        compare(g.y, -1)
+        local h = a:sign()
+        compare(h.x, 1)
+        compare(h.y, -1)
 
         -- mirror (vector in the opposite direction)
-        local h = -a
-        compare(h.x, -10)
-        compare(h.y, 10)
+        local i = -a
+        compare(i.x, -10)
+        compare(i.y, 10)
     end,
 
     function()

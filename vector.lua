@@ -62,6 +62,9 @@ local Vector_proto = {
 	round = function(self)
 		return Vector(math.floor(self.x+0.5),math.floor(self.y+0.5))
 	end,
+	ceil = function(self)
+		return Vector(math.ceil(self.x), math.ceil(self.y))
+	end,
 	rot = function(self, angle)
 		local c,s = math.cos(angle), math.sin(angle)
 		return Vector(self.x*c-self.y*s, self.x*s+self.y*c)

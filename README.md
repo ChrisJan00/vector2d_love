@@ -12,7 +12,7 @@ Usage:
 
 Including it in your project:
 
-	require "vector" 
+	require "vector"
 
 Creating:
 
@@ -27,7 +27,7 @@ Getting components:
 	y 			= vector.y
 	radius 		= vector:mod()
 	angle 		= vector:angle()
-	
+
 
 Comparison:
 
@@ -50,6 +50,7 @@ Operations (return copy of vector):
 	abs_of_components 		= vector:abs()
 	floor_of_components 	= vector:floor()
 	round_of_components     = vector:round()
+	ceil_of_components      = vector:ceil()
 	sign_of_components 		= vector:sign()
 	rotate					= vector:rot(angle)
 	angle_between_vectors	= vector:angleBetween(vector_2)
@@ -64,14 +65,14 @@ Operations (return number(s)):
 
 	dot_product 			= vector1 * vector2
 	x,y                     = vector:unpack()
-	
+
 
 Attach user data:
-    
+
     The basic creation operation accepts one extra parameter "data", which is
     expected to be a table.  The table is appended to the vector.  Operations
     that return new vectors do NOT pass this data around.
-    
+
     Example:
     local v2 = Vector(10,11,{foo="one", bar=-1})
     returns a vector { x = 10, y = 11, foo = "one", bar = -1 }
